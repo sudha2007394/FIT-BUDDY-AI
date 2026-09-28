@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fit Buddy AI</title>
+<style>
+body{font-family:Arial;background:#0f172a;color:white;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}
+.card{background:#1e293b;padding:30px;border-radius:15px;width:400px;box-shadow:0 0 20px #38bdf8}
+input,select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none}
+button{width:100%;padding:12px;background:#38bdf8;color:#000;font-weight:bold;border:none;border-radius:8px;cursor:pointer;margin-top:10px}
+#result{margin-top:20px;background:#0f172a;padding:15px;border-radius:10px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>💪 Fit Buddy AI</h2>
+<input id="age" type="number" placeholder="Age - 22">
+<input id="weight" type="number" placeholder="Weight kg - 70">
+<input id="height" type="number" placeholder="Height cm - 175">
+<select id="goal">
+<option>muscle gain</option>
+<option>fat loss</option>
+<option>weight gain</option>
+</select>
+<button onclick="generate()">Generate Plan with AI</button>
+<div id="result">Plan inga varum da...</div>
+</div>
+
+<script>
+async function generate(){
+ let resultDiv = document.getElementById('result');
+ resultDiv.innerText = "AI Yosikuthu da... ⏳";
+ let data = {
+   age: parseInt(document.getElementById('age').value),
+   weight: parseFloat(document.getElementById('weight').value),
+   height: parseFloat(document.getElementById('height').value),
+   goal: document.getElementById('goal').value
+ };
+ let res = await fetch('/api/generate-plan',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body: JSON.stringify(data)
+ });
+ let json = await res.json();
+ resultDiv.innerText = json.plan || json.error;
+}
+</script>
+</body>
+</html>
